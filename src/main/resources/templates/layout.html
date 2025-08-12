@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -104,7 +104,7 @@
         </div>
     </nav>
 
-    <main class="container mt-4" th:fragment="content">
+    <main class="container mt-4" th:insert="~{::content}">
         <!-- Content will be inserted here -->
     </main>
 

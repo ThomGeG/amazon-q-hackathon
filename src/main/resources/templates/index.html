@@ -4,7 +4,7 @@
     <title>Creditinder - Home</title>
 </head>
 <body>
-    <main class="container mt-4" th:fragment="content">
+    <div th:fragment="content">
         <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
             <span th:text="${message}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -77,6 +77,6 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 </body>
 </html>
