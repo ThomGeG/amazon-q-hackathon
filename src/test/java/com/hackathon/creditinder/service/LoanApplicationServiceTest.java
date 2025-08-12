@@ -97,8 +97,8 @@ class LoanApplicationServiceTest {
     @Test
     @DisplayName("Should return null when no applications available for random selection")
     void shouldReturnNullWhenNoApplicationsAvailableForRandomSelection() {
-        // Create a new service without sample data
-        LoanApplicationService emptyService = new LoanApplicationService();
+        // Create a test service without sample data
+        TestLoanApplicationService emptyService = new TestLoanApplicationService();
         
         LoanApplication randomApp = emptyService.getRandomApplication();
         

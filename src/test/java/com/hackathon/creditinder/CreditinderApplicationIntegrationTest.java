@@ -117,9 +117,9 @@ class CreditinderApplicationIntegrationTest {
                 .orElse(null);
         
         assertNotNull(submitted);
-        assertEquals(new BigDecimal("30000.00"), submitted.getLoanAmount());
+        assertEquals(0, new BigDecimal("30000.00").compareTo(submitted.getLoanAmount()));
         assertEquals("Home Improvement", submitted.getLoanPurpose());
-        assertEquals(new BigDecimal("70000.00"), submitted.getAnnualIncome());
+        assertEquals(0, new BigDecimal("70000.00").compareTo(submitted.getAnnualIncome()));
         assertEquals(750, submitted.getCreditScore());
         assertEquals("Full-time", submitted.getEmploymentStatus());
         assertEquals("Integration test application", submitted.getAdditionalNotes());
@@ -205,8 +205,41 @@ class CreditinderApplicationIntegrationTest {
         ResponseEntity<String> response = restTemplate.getForEntity(
                 "http://localhost:" + port + "/application/non-existent-id", String.class);
 
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
-        assertTrue(response.getHeaders().getLocation().toString().contains("/applications"));
+        // Should get a successful response (TestRestTemplate follows redirects by default)
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        
+        // Should NOT contain application details content, but should contain applications list content
+        assertFalse(response.getBody().contains("Loan Application Details"));
+        assertTrue(response.getBody().contains("All Loan Applications") || 
+                  response.getBody().contains("No Applications Yet"));
+    }
+
+    @Test
+    @DisplayName("Should handle redirect behavior correctly")
+    void shouldHandleRedirectBehaviorCorrectly() {
+        // This test verifies that our redirect logic works
+        // by checking that a valid ID shows details and invalid ID shows list
+        
+        // Get a valid application ID
+        List<LoanApplication> applications = loanApplicationService.getAllApplications();
+        assertFalse(applications.isEmpty(), "Should have sample applications");
+        
+        String validId = applications.get(0).getId();
+        
+        // Test valid ID - should show application details
+        ResponseEntity<String> validResponse = restTemplate.getForEntity(
+                "http://localhost:" + port + "/application/" + validId, String.class);
+        
+        assertEquals(HttpStatus.OK, validResponse.getStatusCode());
+        assertTrue(validResponse.getBody().contains("Loan Application Details"));
+        
+        // Test invalid ID - should redirect to applications list
+        ResponseEntity<String> invalidResponse = restTemplate.getForEntity(
+                "http://localhost:" + port + "/application/invalid-id-12345", String.class);
+        
+        assertEquals(HttpStatus.OK, invalidResponse.getStatusCode());
+        assertFalse(invalidResponse.getBody().contains("Loan Application Details"));
+        assertTrue(invalidResponse.getBody().contains("All Loan Applications"));
     }
 
     @Test

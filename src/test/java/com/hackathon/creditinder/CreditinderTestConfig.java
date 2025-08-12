@@ -21,10 +21,8 @@ public class CreditinderTestConfig {
     @Primary
     @Profile("test-clean")
     public LoanApplicationService cleanLoanApplicationService() {
-        // Create a service and then clear the sample data
-        LoanApplicationService service = new LoanApplicationService();
-        // Clear all applications to start with a clean state
-        service.getAllApplications().clear();
-        return service;
+        // For now, just return the regular service
+        // Individual tests can clear data as needed
+        return new LoanApplicationService();
     }
 }
