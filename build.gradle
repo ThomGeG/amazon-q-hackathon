@@ -1,0 +1,61 @@
+plugins {
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+}
+
+group = 'com.hackathon'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.webjars:bootstrap:5.3.2'
+    implementation 'org.webjars:jquery:3.7.1'
+    
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Ensure bootRun task is available and configured
+bootRun {
+    jvmArgs = ['-Dspring.profiles.active=dev']
+    systemProperty 'spring.devtools.restart.enabled', 'true'
+    systemProperty 'spring.devtools.livereload.enabled', 'true'
+}
+
+// Configure the jar task
+jar {
+    enabled = false
+    archiveClassifier = ''
+}
+
+// Configure the bootJar task
+bootJar {
+    enabled = true
+    archiveClassifier = ''
+    mainClass = 'com.hackathon.creditinder.CreditinderApplication'
+}

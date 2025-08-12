@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head>
+    <title>Apply for Loan - Creditinder</title>
+</head>
+<body>
+    <main class="container mt-4" th:fragment="content">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-0">
+                            <i class="fas fa-file-alt"></i> Loan Application
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/apply}" th:object="${loanApplication}" method="post">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="applicantName" class="form-label">Full Name *</label>
+                                        <input type="text" class="form-control" id="applicantName" 
+                                               th:field="*{applicantName}" th:classappend="${#fields.hasErrors('applicantName')} ? 'is-invalid' : ''">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('applicantName')}" th:errors="*{applicantName}"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="loanAmount" class="form-label">Loan Amount ($) *</label>
+                                        <input type="number" step="0.01" class="form-control" id="loanAmount" 
+                                               th:field="*{loanAmount}" th:classappend="${#fields.hasErrors('loanAmount')} ? 'is-invalid' : ''">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('loanAmount')}" th:errors="*{loanAmount}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="loanPurpose" class="form-label">Loan Purpose *</label>
+                                        <select class="form-select" id="loanPurpose" th:field="*{loanPurpose}" 
+                                                th:classappend="${#fields.hasErrors('loanPurpose')} ? 'is-invalid' : ''">
+                                            <option value="">Select Purpose</option>
+                                            <option value="Home Improvement">Home Improvement</option>
+                                            <option value="Debt Consolidation">Debt Consolidation</option>
+                                            <option value="Vehicle Purchase">Vehicle Purchase</option>
+                                            <option value="Education">Education</option>
+                                            <option value="Medical Expenses">Medical Expenses</option>
+                                            <option value="Business">Business</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('loanPurpose')}" th:errors="*{loanPurpose}"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="annualIncome" class="form-label">Annual Income ($) *</label>
+                                        <input type="number" step="0.01" class="form-control" id="annualIncome" 
+                                               th:field="*{annualIncome}" th:classappend="${#fields.hasErrors('annualIncome')} ? 'is-invalid' : ''">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('annualIncome')}" th:errors="*{annualIncome}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="creditScore" class="form-label">Credit Score *</label>
+                                        <input type="number" min="300" max="850" class="form-control" id="creditScore" 
+                                               th:field="*{creditScore}" th:classappend="${#fields.hasErrors('creditScore')} ? 'is-invalid' : ''">
+                                        <div class="form-text">Range: 300-850</div>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('creditScore')}" th:errors="*{creditScore}"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="employmentStatus" class="form-label">Employment Status *</label>
+                                        <select class="form-select" id="employmentStatus" th:field="*{employmentStatus}" 
+                                                th:classappend="${#fields.hasErrors('employmentStatus')} ? 'is-invalid' : ''">
+                                            <option value="">Select Status</option>
+                                            <option value="Full-time">Full-time</option>
+                                            <option value="Part-time">Part-time</option>
+                                            <option value="Self-employed">Self-employed</option>
+                                            <option value="Contract">Contract</option>
+                                            <option value="Unemployed">Unemployed</option>
+                                            <option value="Retired">Retired</option>
+                                            <option value="Student">Student</option>
+                                        </select>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('employmentStatus')}" th:errors="*{employmentStatus}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="additionalNotes" class="form-label">Additional Notes</label>
+                                <textarea class="form-control" id="additionalNotes" rows="4" 
+                                          th:field="*{additionalNotes}" placeholder="Any additional information that might help your application..."></textarea>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/" class="btn btn-secondary me-md-2">Cancel</a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i> Submit Application
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

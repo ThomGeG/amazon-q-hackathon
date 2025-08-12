@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head>
+    <title>Creditinder - Home</title>
+</head>
+<body>
+    <main class="container mt-4" th:fragment="content">
+        <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${message}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h1 class="display-4 mb-4">
+                    <i class="fas fa-heart text-danger"></i> Welcome to Creditinder
+                </h1>
+                <p class="lead mb-5">The revolutionary way to get loan approvals through community voting!</p>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-file-alt fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">Apply for a Loan</h5>
+                                <p class="card-text">Submit your loan application and let the community decide!</p>
+                                <a href="/apply" class="btn btn-primary">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card h-100 border-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-hand-pointer fa-3x text-success mb-3"></i>
+                                <h5 class="card-title">Vote on Applications</h5>
+                                <p class="card-text">Help fellow members by voting on their loan applications!</p>
+                                <a href="/swipe" class="btn btn-success">Start Swiping</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-5">
+                    <a href="/applications" class="btn btn-outline-secondary">
+                        <i class="fas fa-list"></i> View All Applications
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3 class="text-center mb-4">How It Works</h3>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-edit fa-2x text-primary"></i>
+                        </div>
+                        <h5>1. Apply</h5>
+                        <p>Submit your loan application with all required details</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-users fa-2x text-warning"></i>
+                        </div>
+                        <h5>2. Community Votes</h5>
+                        <p>Credit union members swipe and vote on applications</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-check-circle fa-2x text-success"></i>
+                        </div>
+                        <h5>3. Decision</h5>
+                        <p>Applications with high approval rates get processed faster</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
