@@ -4,6 +4,8 @@ import com.hackathon.creditinder.model.LoanApplication;
 import com.hackathon.creditinder.service.LoanApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,9 +55,13 @@ public class CreditinderController {
     
     @PostMapping("/vote")
     @ResponseBody
-    public String vote(@RequestParam String applicationId, @RequestParam boolean approve) {
-        loanApplicationService.voteOnApplication(applicationId, approve);
-        return "success";
+    public ResponseEntity<String> vote(@RequestParam String applicationId, @RequestParam boolean approve) {
+        try {
+            loanApplicationService.voteOnApplication(applicationId, approve);
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
+        }
     }
     
     @GetMapping("/applications")

@@ -13,6 +13,8 @@
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
         }
         .swipe-card:hover {
             transform: translateY(-5px);
@@ -31,6 +33,12 @@
             height: 70px;
             border-radius: 50%;
             margin-right: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            will-change: transform;
+        }
+        .btn-reject:hover, .btn-reject:focus {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
         }
         .btn-approve {
             background: linear-gradient(45deg, #51cf66, #40c057);
@@ -38,6 +46,12 @@
             width: 70px;
             height: 70px;
             border-radius: 50%;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            will-change: transform;
+        }
+        .btn-approve:hover, .btn-approve:focus {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(81, 207, 102, 0.4);
         }
         .navbar-brand {
             font-weight: bold;
@@ -46,6 +60,32 @@
         .credit-score-badge {
             font-size: 1.2em;
             padding: 8px 16px;
+        }
+        
+        /* Performance optimizations */
+        * {
+            box-sizing: border-box;
+        }
+        
+        .table {
+            contain: layout style paint;
+        }
+        
+        .progress-bar {
+            will-change: width;
+        }
+        
+        /* Focus indicators for accessibility */
+        .btn:focus, .nav-link:focus, .form-control:focus, .form-select:focus {
+            outline: 2px solid #0d6efd;
+            outline-offset: 2px;
+        }
+        
+        /* Reduced motion for users who prefer it */
+        @media (prefers-reduced-motion: reduce) {
+            .swipe-card, .btn-reject, .btn-approve {
+                transition: none;
+            }
         }
     </style>
 </head>

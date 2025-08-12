@@ -20,15 +20,17 @@
         
         <div th:if="${application}" class="row justify-content-center">
             <div class="col-md-6">
-                <div class="card swipe-card" th:attr="data-app-id=${application.id}">
+                <div class="card swipe-card" th:attr="data-app-id=${application.id}" 
+                     role="article" aria-label="Loan application for review">
                     <div class="card-header bg-primary text-white text-center">
-                        <h5 class="mb-0" th:text="${application.applicantName}">Applicant Name</h5>
+                        <h5 class="mb-0" th:text="${application.applicantName}" id="applicant-name">Applicant Name</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" aria-labelledby="applicant-name">
                         <div class="row mb-3">
                             <div class="col-6">
                                 <strong>Loan Amount:</strong><br>
-                                <span class="h5 text-success" th:text="'$' + ${#numbers.formatDecimal(application.loanAmount, 0, 'COMMA', 2, 'POINT')}">$25,000</span>
+                                <span class="h5 text-success" th:text="'$' + ${#numbers.formatDecimal(application.loanAmount, 0, 'COMMA', 2, 'POINT')}" 
+                                      aria-label="Loan amount requested">$25,000</span>
                             </div>
                             <div class="col-6">
                                 <strong>Purpose:</strong><br>
@@ -45,7 +47,8 @@
                                 <strong>Credit Score:</strong><br>
                                 <span class="badge credit-score-badge" 
                                       th:classappend="${application.creditScore >= 750} ? 'bg-success' : (${application.creditScore >= 700} ? 'bg-warning' : 'bg-danger')"
-                                      th:text="${application.creditScore}">720</span>
+                                      th:text="${application.creditScore}"
+                                      th:attr="aria-label='Credit score: ' + ${application.creditScore} + (${application.creditScore >= 750} ? ' - Excellent' : (${application.creditScore >= 700} ? ' - Good' : ' - Needs Improvement'))">720</span>
                             </div>
                         </div>
                         
@@ -61,14 +64,16 @@
                             <p class="text-muted" th:text="${application.additionalNotes}">Additional information...</p>
                         </div>
                         
-                        <div class="row text-center">
+                        <div class="row text-center" role="region" aria-label="Current voting results">
                             <div class="col-6">
                                 <small class="text-muted">Current Votes</small><br>
-                                <span class="badge bg-success" th:text="${application.approvalVotes} + ' Approve'">0 Approve</span>
+                                <span class="badge bg-success" th:text="${application.approvalVotes} + ' Approve'" 
+                                      th:attr="aria-label=${application.approvalVotes} + ' approval votes'">0 Approve</span>
                             </div>
                             <div class="col-6">
                                 <small class="text-muted">&nbsp;</small><br>
-                                <span class="badge bg-danger" th:text="${application.rejectionVotes} + ' Reject'">0 Reject</span>
+                                <span class="badge bg-danger" th:text="${application.rejectionVotes} + ' Reject'" 
+                                      th:attr="aria-label=${application.rejectionVotes} + ' rejection votes'">0 Reject</span>
                             </div>
                         </div>
                     </div>
@@ -77,11 +82,15 @@
         </div>
         
         <div th:if="${application}" class="vote-buttons">
-            <button class="btn btn-reject" onclick="vote(false)">
-                <i class="fas fa-times fa-2x text-white"></i>
+            <button class="btn btn-reject" onclick="vote(false)" 
+                    aria-label="Reject this loan application" 
+                    title="Reject Application (Left Arrow Key)">
+                <i class="fas fa-times fa-2x text-white" aria-hidden="true"></i>
             </button>
-            <button class="btn btn-approve" onclick="vote(true)">
-                <i class="fas fa-heart fa-2x text-white"></i>
+            <button class="btn btn-approve" onclick="vote(true)" 
+                    aria-label="Approve this loan application" 
+                    title="Approve Application (Right Arrow Key)">
+                <i class="fas fa-heart fa-2x text-white" aria-hidden="true"></i>
             </button>
         </div>
         
@@ -96,6 +105,10 @@
         function vote(approve) {
             const applicationId = document.querySelector('.swipe-card').getAttribute('data-app-id');
             
+            // Disable buttons to prevent double-clicking
+            const buttons = document.querySelectorAll('.vote-buttons button');
+            buttons.forEach(btn => btn.disabled = true);
+            
             // Add animation
             const card = document.querySelector('.swipe-card');
             card.style.transform = approve ? 'translateX(100%) rotate(20deg)' : 'translateX(-100%) rotate(-20deg)';
@@ -108,20 +121,53 @@
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: `applicationId=${applicationId}&approve=${approve}`
-            }).then(() => {
-                // Reload page after animation
-                setTimeout(() => {
-                    window.location.reload();
-                }, 500);
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                if (data === 'success') {
+                    // Reload page after animation
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
+                } else {
+                    throw new Error('Server returned error');
+                }
+            })
+            .catch(error => {
+                console.error('Error voting:', error);
+                // Reset UI on error
+                card.style.transform = '';
+                card.style.opacity = '1';
+                buttons.forEach(btn => btn.disabled = false);
+                alert('Sorry, there was an error processing your vote. Please try again.');
             });
         }
         
-        // Add keyboard support
+        // Add keyboard support with better error handling
         document.addEventListener('keydown', function(event) {
+            // Only handle if voting buttons are visible and enabled
+            const buttons = document.querySelectorAll('.vote-buttons button');
+            if (buttons.length === 0 || buttons[0].disabled) return;
+            
             if (event.key === 'ArrowLeft') {
+                event.preventDefault();
                 vote(false);
             } else if (event.key === 'ArrowRight') {
+                event.preventDefault();
                 vote(true);
+            }
+        });
+        
+        // Add focus management for accessibility
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstButton = document.querySelector('.btn-reject');
+            if (firstButton) {
+                firstButton.focus();
             }
         });
     </script>

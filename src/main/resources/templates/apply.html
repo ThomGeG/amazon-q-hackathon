@@ -10,8 +10,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="mb-0">
-                            <i class="fas fa-file-alt"></i> Loan Application
+                            <i class="fas fa-file-alt" aria-hidden="true"></i> Loan Application
                         </h3>
+                        <p class="mb-0 mt-2 text-muted">Please fill out all required fields marked with *</p>
                     </div>
                     <div class="card-body">
                         <form th:action="@{/apply}" th:object="${loanApplication}" method="post">
@@ -20,7 +21,9 @@
                                     <div class="mb-3">
                                         <label for="applicantName" class="form-label">Full Name *</label>
                                         <input type="text" class="form-control" id="applicantName" 
-                                               th:field="*{applicantName}" th:classappend="${#fields.hasErrors('applicantName')} ? 'is-invalid' : ''">
+                                               th:field="*{applicantName}" th:classappend="${#fields.hasErrors('applicantName')} ? 'is-invalid' : ''"
+                                               aria-required="true" aria-describedby="applicantName-help">
+                                        <div id="applicantName-help" class="form-text">Enter your full legal name</div>
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('applicantName')}" th:errors="*{applicantName}"></div>
                                     </div>
                                 </div>
